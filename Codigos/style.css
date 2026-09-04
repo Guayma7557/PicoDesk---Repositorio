@@ -1,0 +1,83 @@
+:root{
+    /* ------ COLORES ------ */
+    --ColorPrimario: #477F90;
+    --ColorSecundario: #A44545;
+    --ColorTerciario: #404040;
+    --ColorCuarto: #303030;
+    --ColorQuinto: #E8E7E4;
+}
+
+/* --------------- Configuraciones Generales --------------- */
+
+*{ /* Eliminación de los valores default. */
+    padding: 0px;
+    margin: 0px;
+        box-sizing: border-box;
+        border: 1px solid black;
+}
+
+/* --------------- Body --------------- */
+
+body{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "header header"
+        "opciones logo"
+    ;
+}
+
+
+/* --------------- Header --------------- */
+
+header{
+    grid-area: header;
+    display: flex;
+    flex-direction: row;
+}
+
+#CuentayModo, nav{
+    display: flex;
+    align-items: flex-end;
+}
+
+#CuentayModo>*{
+    margin: 1%;
+}
+
+#Cuenta{
+    width: 3em; /* Medida em para que sea equivalente a la altura del texto.*/
+    height: 3em;
+    border-radius: 50%; /* Al 50% para redondear cada esquina al 50% y tener un redondeado el 100%. */
+    background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJDPXTxx-m6EQgtQ-_rpKKl2yK-v1FhGbRg529rs517iizSQ74L0oLAU4v&s=10");
+    background-size: cover; /* Para que no se distorsione la imágen*/
+}
+
+/* --------------- Opciones --------------- */
+
+#Opciones{
+    grid-area: opciones;
+    max-width: 25vw;
+    margin: 1%;
+}
+
+#botones{
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+}
+
+.Opciones{
+    margin-top: 1em;
+}
+
+/* --------------- Logo --------------- */
+#logo{
+    grid-area: logo;
+}
+
+#logo>div{
+    vertical-align: middle;
+    text-align: center;
+}
+
