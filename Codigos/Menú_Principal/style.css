@@ -1,0 +1,227 @@
+/* --------------- Imports y root --------------- */
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
+
+:root{
+    /* ------ COLORES ------ */
+    --ColorPrimario: #477F90;
+    --ColorSecundario: #A44545;
+    --ColorTerciario: #404040;
+    --ColorCuarto: #303030;
+    --ColorQuinto: #E8E7E4;
+}
+
+/* --------------- Configuraciones Generales --------------- */
+
+    *{ /* Eliminación de los valores default. */
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+        font-family: 'DotGothic16';
+    }
+
+    h1, h2{
+        font-family: 'VT323';
+        font-size: 3em;
+        font-weight: normal;
+        color: var(--ColorQuinto);
+    }
+
+    #logo h2{
+        transform: rotate(-8deg);
+        margin-top: 0.5em;
+    }
+
+/* --------------- Body y Fondo --------------- */
+
+    body{
+        background-image:
+        linear-gradient(45deg, var(--ColorSecundario), var(--ColorPrimario));
+        height: 100vh;
+        max-height: 100vh;
+        z-index: 1;
+    }
+
+    button{
+        padding: 0.5em;
+        border-radius: 5px;
+        height: 2.7em;
+        font-size: 1.1em;
+    }
+
+    #DecoracióndeRayas{
+        background-image: 
+        repeating-linear-gradient(
+            -45deg,
+            rgba(40, 40, 40, 0.08) 0px,
+            rgba(40, 40, 40, 0.08) 6px,
+            transparent 0px,
+            transparent 15px);
+        width: 100vw;
+        height: 100vh;
+        animation: MovimientoFondo 0.3s infinite;
+    }
+
+/* --------------- Header --------------- */
+
+    header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        background-color: var(--ColorTerciario);
+        padding: 0.2em;
+        max-height: 20vh;
+    }
+    
+    header button{
+        background-color: var(--ColorTerciario);
+        color: var(--ColorQuinto);
+        border:none;
+        border-radius: none;
+        transition: 0.5s;
+    }
+
+    header button:hover{
+        background-color: var(--ColorCuarto);
+        border-bottom: 4px solid var(--ColorQuinto);
+        cursor: pointer;
+    }
+
+    #CuentayModo, nav{
+        display: flex;
+        align-content: center;
+        justify-content: space-around;
+    }
+
+    #CuentayModo{
+        width: 20%;
+        max-width: 60%;
+        flex-grow: 1;
+    }
+
+    #CuentayModo>*{
+        margin: 1%;
+    }
+
+    #Cuenta{
+        width: 3em; /* Medida em para que sea equivalente a la altura del texto.*/
+        height: 3em;
+        border-radius: 50%; /* Al 50% para redondear cada esquina al 50% y tener un redondeado el 100%. */
+        background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original');
+        background-size: cover;
+        border: none;
+    }
+
+/* --------------- Opciones y Logo --------------- */
+
+    #OpcionesYLogo{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        height: 80vh;
+    }
+
+/* --------------- Opciones --------------- */
+
+    #Opciones{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40Dvw;
+        margin: 1%;
+        flex-grow: 1;
+        min-width: 25vw;
+        padding: 2em;
+    }
+
+    #botones{
+        display: flex;
+        flex-direction: column;
+        margin: 5%;
+        width: 40%;
+    }
+
+    .Opciones{
+        margin-top: 1em;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(2.5px);
+        -webkit-backdrop-filter: blur(2.5px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: var(--ColorQuinto);
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .Opciones:hover{
+        transform:rotate(2deg);
+        background-color: rgba(255, 255, 255, 0.28);
+        box-shadow: 10px 10px 20px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .Opciones:active{
+        background-color: var(--ColorQuinto);
+        color: var(--ColorCuarto);
+        box-shadow: none;
+        transform: rotate(2deg);
+        transform: translateY(-10px);
+    }
+
+    #Opciones img{
+        height: 3em;
+        width: 3em;
+        margin-top: 1em;
+    }
+
+    .ÍconoyBotón{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+/* --------------- Logo --------------- */
+
+    #logo{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 30;
+        min-width: 25vw;
+        flex-grow: 1;
+    }
+
+    #logo h2{
+        transform: rotate(45deg);
+        animation: AnimaciónBienvenido 1s ease-in-out infinite;
+    }
+
+    #logo img{
+        max-width: 80vw;
+    }
+
+/* --------------- Keyframes (animaciones) --------------- */
+
+@keyframes MovimientoFondo {
+    0%{
+        background-position: -3px;
+    }
+    100%{
+        background-position: 14px;
+    }
+}
+
+@keyframes AnimaciónBienvenido{
+    0%{
+        transform: scale(1) rotate(-8deg);
+    }
+    60%{
+        transform: scale(1.1) rotate(-6deg);
+        
+    }
+    100%{
+        transform: scale(1) rotate(-8deg);
+       
+    }
+}
