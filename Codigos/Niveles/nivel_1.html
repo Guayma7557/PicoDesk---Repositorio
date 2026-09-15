@@ -1,0 +1,65 @@
+<!DOCTYPE hmyl>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nivel - 1</title>
+  <link rel="stylesheet" href="nivel_1.css" />
+</head>
+<body>
+
+  <section class="pantalla-niveles">
+    <!-- Espacio negro: aquí se renderizará el juego -->
+    <div class="contenedor-nivel">
+      <img
+        src="../../../Recursos_Gráficos/Sprites/prueba/Gabinete.png"
+        alt="Vista interna de un gabinete de PC, con tres compartimientos para ventiladores, guías de cableado y una bandeja para la fuente de poder"
+        class="imagen-nivel"
+      />
+
+      <div class="zona-placa-madre">
+        <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
+      </div>
+    </div>
+
+    <div class="barra-lateral">
+      <!-- Botón para salir: triángulo -->
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+
+      <div
+        class="barra-progreso"
+        role="progressbar"
+        aria-valuenow="0"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Progreso del nivel"
+      >
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+  <div class="overlay-confirmacion" aria-hidden="true">
+      <div
+        class="dialogo-confirmacion"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="dialogo-confirmacion-texto"
+      >
+        <p id="dialogo-confirmacion-texto" class="dialogo-confirmacion__texto">
+          ¿Estas seguro de salir?
+        </p>
+ 
+        <div class="dialogo-confirmacion__opciones">
+          <!-- "Sí": texto interactivo -->
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+ 
+          <!-- "No": botón rojo -->
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <script src="nivel_1.js"></script>
+</body>
+</html>
