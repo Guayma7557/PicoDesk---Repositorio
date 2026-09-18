@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nivel - 1</title>
+  <link rel="stylesheet" href="nivel_1.css" />
+</head>
+<body>
+
+  <section class="pantalla-niveles">
+    <!-- Espacio negro: aquí se renderizará el juego -->
+    <div class="contenedor-nivel">
+      <img
+        src="../../Recursos_Gráficos/Sprites/Gabinete_prueba.png"
+        alt="Vista interna de un gabinete de PC, con tres compartimientos para ventiladores, guías de cableado y una bandeja para la fuente de poder"
+        class="imagen-nivel"
+      />
+
+      <div class="zona-placa-madre">
+        <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
+
+        <!-- NUEVO: la placa madre colocada. Arranca oculta; nivel_1.js le
+             saca el "hidden" cuando se usa la herramienta "placa-madre". -->
+        <img
+          src="../../Recursos_Gráficos/Sprites/Placa_madre.png"
+          alt="Placa madre colocada"
+          class="placa-madre-colocada"
+          hidden
+        />
+
+        <!-- NUEVO: los 6 puntos de fijación. Posiciones de ejemplo (ver
+             aviso en el chat) hasta que ajustemos con la imagen real. -->
+        <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--6" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 6"></button>
+      </div>
+    </div>
+    <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
+      <!-- NUEVO: cada herramienta ahora tiene data-herramienta + data-uso
+           (o data-usos-restantes para las que se gastan). -->
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="placa-madre"
+        data-uso="unico"
+      >
+        <img src="../../Recursos_Gráficos/Sprites/Placa_madre.png" alt="Placa madre" />
+      </button>
+
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="destornillador"
+        data-uso="ilimitado"
+      >
+        <img src="../../Recursos_Gráficos/Sprites/Destornillador.png" alt="Destornillador" />
+      </button>
+
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="tornillo"
+        data-usos-restantes="6"
+      >
+        <img src="../../Recursos_Gráficos/Sprites/Tornillo.png" alt="Tornillo" />
+        <span class="barra-herramientas__contador">6</span>
+      </button>
+
+      <div class="barra-herramientas__item"></div>
+      <div class="barra-herramientas__item"></div>
+    </div>
+    <div class="barra-lateral">
+      <!-- Botón para salir: triángulo -->
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+
+      <div
+        class="barra-progreso"
+        role="progressbar"
+        aria-valuenow="0"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Progreso del nivel"
+      >
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+  <div class="overlay-confirmacion" aria-hidden="true">
+      <div
+        class="dialogo-confirmacion"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="dialogo-confirmacion-texto"
+      >
+        <p id="dialogo-confirmacion-texto" class="dialogo-confirmacion__texto">
+          ¿Estas seguro de salir?
+        </p>
+ 
+        <div class="dialogo-confirmacion__opciones">
+          <!-- "Sí": texto interactivo -->
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+ 
+          <!-- "No": botón rojo -->
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- NUEVO: lógica de selección y uso de herramientas -->
+  <script src="herramientas_nivel_1.js"></script>
+  <script src="nivel_1.js"></script>
+</body>
+</html>
