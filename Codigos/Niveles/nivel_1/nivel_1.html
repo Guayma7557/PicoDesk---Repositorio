@@ -2,42 +2,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Nivel - 1</title>
   <link rel="stylesheet" href="nivel_1.css" />
 </head>
 <body>
 
   <section class="pantalla-niveles">
-    <!-- Espacio negro: aquí se renderizará el juego -->
-    <div class="contenedor-nivel">
-      <img
-        src="../../Recursos_Gráficos/Sprites/Gabinete_prueba.png"
-        alt="Vista interna de un gabinete de PC, con tres compartimientos para ventiladores, guías de cableado y una bandeja para la fuente de poder"
-        class="imagen-nivel"
-      />
-
-      <div class="zona-placa-madre">
-        <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
-
-        <!-- NUEVO: la placa madre colocada. Arranca oculta; nivel_1.js le
-             saca el "hidden" cuando se usa la herramienta "placa-madre". -->
+    <!-- NUEVO: fila que agrupa el gabinete + el panel de misiones a la derecha -->
+    <div class="area-juego">
+      <div class="contenedor-nivel">
         <img
-          src="../../Recursos_Gráficos/Sprites/Placa_madre.png"
-          alt="Placa madre colocada"
-          class="placa-madre-colocada"
-          hidden
+          src="../../../Recursos_Gráficos/Sprites/Gabinete.png"
+          alt="Vista interna de un gabinete de PC, con tres compartimientos para ventiladores, guías de cableado y una bandeja para la fuente de poder"
+          class="imagen-nivel"
         />
 
-        <!-- NUEVO: los 6 puntos de fijación. Posiciones de ejemplo (ver
-             aviso en el chat) hasta que ajustemos con la imagen real. -->
-        <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
-        <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
-        <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
-        <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
-        <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
-        <button type="button" class="punto-tornillo punto-tornillo--6" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 6"></button>
+        <div class="zona-placa-madre">
+          <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
+
+          <!-- NUEVO: la placa madre colocada. Arranca oculta; nivel_1.js le
+               saca el "hidden" cuando se usa la herramienta "placa-madre". -->
+          <img
+            src="../../../Recursos_Gráficos/Sprites/Placa_madre.png"
+            alt="Placa madre colocada"
+            class="placa-madre-colocada"
+            hidden
+          />
+
+          <!-- NUEVO: los 6 puntos de fijación. Posiciones de ejemplo (ver
+               aviso en el chat) hasta que ajustemos con la imagen real. -->
+          <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--6" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 6"></button>
+          <button type="button" class="punto-tornillo punto-tornillo--7" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 7"></button>
+        </div>
       </div>
+
+      <!-- NUEVO: panel de misiones, paso a paso -->
+      <aside class="panel-misiones" aria-label="Misiones del nivel">
+        <h2 class="panel-misiones__titulo">Misiones</h2>
+        <ol class="panel-misiones__lista">
+          <li class="mision" data-mision="colocar-placa">
+            <span class="mision__marca"></span>
+            <span class="mision__texto">Colocar la placa madre</span>
+          </li>
+          <li class="mision oculta" data-mision="colocar-tornillos">
+            <span class="mision__marca"></span>
+            <span class="mision__texto">Colocar los 7 tornillos</span>
+          </li>
+          <li class="mision oculta" data-mision="ajustar-tornillos">
+            <span class="mision__marca"></span>
+            <span class="mision__texto">Ajustar los tornillos</span>
+          </li>
+        </ol>
+      </aside>
     </div>
     <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
       <!-- NUEVO: cada herramienta ahora tiene data-herramienta + data-uso
@@ -48,7 +70,7 @@
         data-herramienta="placa-madre"
         data-uso="unico"
       >
-        <img src="../../Recursos_Gráficos/Sprites/Placa_madre.png" alt="Placa madre" />
+        <img src="../../../Recursos_Gráficos/Sprites/Placa_madre.png" alt="Placa madre" />
       </button>
 
       <button
@@ -57,17 +79,17 @@
         data-herramienta="destornillador"
         data-uso="ilimitado"
       >
-        <img src="../../Recursos_Gráficos/Sprites/Destornillador.png" alt="Destornillador" />
+        <img src="../../../Recursos_Gráficos/Sprites/Destornillador.png" alt="Destornillador" />
       </button>
 
       <button
         type="button"
         class="barra-herramientas__item"
         data-herramienta="tornillo"
-        data-usos-restantes="6"
+        data-usos-restantes="7"
       >
-        <img src="../../Recursos_Gráficos/Sprites/Tornillo.png" alt="Tornillo" />
-        <span class="barra-herramientas__contador">6</span>
+        <img src="../../../Recursos_Gráficos/Sprites/Tornillo.png" alt="Tornillo" />
+        <span class="barra-herramientas__contador">7</span>
       </button>
 
       <div class="barra-herramientas__item"></div>
@@ -113,6 +135,8 @@
  
   <!-- NUEVO: lógica de selección y uso de herramientas -->
   <script src="herramientas_nivel_1.js"></script>
+  <!-- NUEVO: panel de misiones paso a paso -->
+  <script src="misiones_nivel_1.js"></script>
   <script src="nivel_1.js"></script>
 </body>
 </html>

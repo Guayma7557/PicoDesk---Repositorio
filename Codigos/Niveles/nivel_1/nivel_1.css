@@ -292,14 +292,17 @@ button {
   cursor: pointer;
 }
 
-/* Posiciones de ejemplo (2 columnas x 3 filas) dentro de la zona roja.
-   Avisado en el chat: ajustar estos % cuando tengamos la imagen real. */
-.punto-tornillo--1 { top: 30%; left: 20%; }
-.punto-tornillo--2 { top: 55%; left: 20%; }
-.punto-tornillo--3 { top: 80%; left: 20%; }
-.punto-tornillo--4 { top: 30%; left: 80%; }
-.punto-tornillo--5 { top: 55%; left: 80%; }
-.punto-tornillo--6 { top: 80%; left: 80%; }
+/* Posiciones ajustadas a los 7 agujeros de fijación reales visibles en
+   el gabinete (círculos punteados de la referencia): 2 arriba, 2 pegados
+   a los bordes laterales a media altura, 3 abajo. Los % son relativos
+   a .zona-placa-madre. */
+.punto-tornillo--1 { top: 3%;  left: 63%; }
+.punto-tornillo--2 { top: 3%;  left: 97%; }
+.punto-tornillo--3 { top: 52%; left: 0%; }
+.punto-tornillo--4 { top: 52%; left: 97%; }
+.punto-tornillo--5 { top: 96%; left: 0%; }
+.punto-tornillo--6 { top: 96%; left: 63%; }
+.punto-tornillo--7 { top: 96%; left: 97%; }
 
 /* Tornillo ya colocado (pendiente de apretar) */
 .punto-tornillo[data-colocado="true"] {
@@ -404,3 +407,84 @@ div.barra-herramientas__item {
 }
 
 /* fin de barra de herramientas */
+.area-juego {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  max-width: 96vw;
+  flex-wrap: wrap; /* en pantallas angostas, el panel pasa debajo */
+}
+
+/* NUEVO: panel de misiones */
+.panel-misiones {
+  width: clamp(11rem, 18vw, 15rem);
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: clamp(0.75rem, 1.5vw, 1.1rem);
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.panel-misiones__titulo {
+  margin: 0 0 clamp(0.7rem, 1.4vw, 1rem);
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  color: #ffffff;
+  text-align: center;
+}
+
+.panel-misiones__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 1.4vw, 1rem);
+}
+
+.mision {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.55rem, 0.95vw, 0.68rem);
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* Misión que todavía no llegó su turno: no se muestra */
+.mision.oculta {
+  display: none;
+}
+
+/* Casillero de estado: vacío = pendiente/activa */
+.mision__marca {
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid #e0b23d;
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/* Misión completada: texto y casillero en verde, con un tilde */
+.mision.completada {
+  color: #6fcf6f;
+}
+
+.mision.completada .mision__marca {
+  position: relative;
+  border-color: #6fcf6f;
+  background-color: #6fcf6f;
+}
+
+.mision.completada .mision__marca::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(14% 44%, 0 63%, 39% 100%, 100% 20%, 82% 4%, 37% 72%);
+  background-color: #1a1a1a;
+}
