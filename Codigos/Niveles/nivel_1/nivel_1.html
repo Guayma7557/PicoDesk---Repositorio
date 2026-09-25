@@ -9,68 +9,83 @@
 <body>
 
   <section class="pantalla-niveles">
-    <!-- NUEVO: fila que agrupa el gabinete + el panel de misiones a la derecha -->
-    <div class="area-juego">
-      <div class="contenedor-nivel">
-        <img
-          src="../../../Recursos_Gráficos/Sprites/Gabinete.png"
-          alt="Vista interna de un gabinete de PC, con tres compartimientos para ventiladores, guías de cableado y una bandeja para la fuente de poder"
-          class="imagen-nivel"
-        />
 
-        <div class="zona-placa-madre">
-          <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
+    <!-- Secuencia de fondo a pantalla completa. Arranca mostrando
+         "Fondo inclinado - Nivel 1" (toma de la torre completa) y, a los 3s,
+         hace un cross-fade con "Fondo superior - Nivel 1" (bandeja vacía).
+         Cuando el jugador coloca la placa madre, herramientas_nivel_1.js le
+         agrega una clase a ".fondo-marco" que dispara OTRO cross-fade hacia
+         "Fondo superior - Nivel 2", que ya trae la placa dibujada en su
+         posición/rotación final correcta (encarada hacia la placa de
+         puertos del gabinete) -- por eso ya no hace falta un sprite aparte
+         para la placa "colocada": el propio fondo la muestra. Las tres
+         imágenes comparten la misma proporción real (521x260), así que
+         ".fondo-marco" respeta esa proporción para que la zona interactiva
+         calce siempre con el dibujo, sea cual sea el tamaño de pantalla. -->
+    <div class="fondo-marco">
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Fondo inclinado - Nivel 1.png"
+        alt=""
+        class="fondo-capa fondo-inclinado"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Fondo superior - Nivel 1.png"
+        alt="Vista cercana de la bandeja de montaje de la placa madre, todavía vacía"
+        class="fondo-capa fondo-superior"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Fondo superior - Nivel 2.png"
+        alt="Placa madre ya colocada y encarada hacia la placa de puertos del gabinete"
+        class="fondo-capa fondo-superior-n2"
+      />
 
-          <!-- NUEVO: la placa madre colocada. Arranca oculta; nivel_1.js le
-               saca el "hidden" cuando se usa la herramienta "placa-madre". -->
-          <img
-            src="../../../Recursos_Gráficos/Sprites/Placa_madre.png"
-            alt="Placa madre colocada"
-            class="placa-madre-colocada"
-            hidden
-          />
+      <div class="zona-placa-madre">
+        <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
 
-          <!-- NUEVO: los 6 puntos de fijación. Posiciones de ejemplo (ver
-               aviso en el chat) hasta que ajustemos con la imagen real. -->
-          <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--6" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 6"></button>
-          <button type="button" class="punto-tornillo punto-tornillo--7" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 7"></button>
-        </div>
+        <!-- Los 5 puntos de fijación para los tornillos: 4 en las esquinas
+             y 1 en el medio del borde derecho. Arrancan ocultos (ver CSS
+             ".placa-colocada .punto-tornillo") y solo se revelan una vez
+             que la placa madre ya está puesta. -->
+        <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
       </div>
-
-      <!-- NUEVO: panel de misiones, paso a paso -->
-      <aside class="panel-misiones" aria-label="Misiones del nivel">
-        <h2 class="panel-misiones__titulo">Misiones</h2>
-        <ol class="panel-misiones__lista">
-          <li class="mision" data-mision="colocar-placa">
-            <span class="mision__marca"></span>
-            <span class="mision__texto">Colocar la placa madre</span>
-          </li>
-          <li class="mision oculta" data-mision="colocar-tornillos">
-            <span class="mision__marca"></span>
-            <span class="mision__texto">Colocar los 7 tornillos</span>
-          </li>
-          <li class="mision oculta" data-mision="ajustar-tornillos">
-            <span class="mision__marca"></span>
-            <span class="mision__texto">Ajustar los tornillos</span>
-          </li>
-        </ol>
-      </aside>
     </div>
+
+    <!-- Panel de misiones, paso a paso -->
+    <aside class="panel-misiones" aria-label="Misiones del nivel">
+      <h2 class="panel-misiones__titulo">Misiones</h2>
+      <ol class="panel-misiones__lista">
+        <li class="mision" data-mision="colocar-placa">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar la placa madre</span>
+        </li>
+        <li class="mision oculta" data-mision="colocar-tornillos">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar los 5 tornillos</span>
+        </li>
+        <li class="mision oculta" data-mision="ajustar-tornillos">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Ajustar los tornillos</span>
+        </li>
+      </ol>
+    </aside>
+
     <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
-      <!-- NUEVO: cada herramienta ahora tiene data-herramienta + data-uso
-           (o data-usos-restantes para las que se gastan). -->
+      <!-- Cada herramienta tiene data-herramienta + data-uso (o
+           data-usos-restantes para las que se gastan). "placa-madre" y
+           "tornillo" se pueden arrastrar (drag) directo a su destino, o
+           seleccionar con click y después click en el destino. -->
       <button
         type="button"
         class="barra-herramientas__item"
         data-herramienta="placa-madre"
         data-uso="unico"
       >
-        <img src="../../../Recursos_Gráficos/Sprites/Placa_madre.png" alt="Placa madre" />
+        <img src="../../../Recursos_Gráficos/Sprites/Motherboard/Motherboard_Frente.png" alt="Placa madre" />
       </button>
 
       <button
@@ -86,10 +101,10 @@
         type="button"
         class="barra-herramientas__item"
         data-herramienta="tornillo"
-        data-usos-restantes="7"
+        data-usos-restantes="5"
       >
-        <img src="../../../Recursos_Gráficos/Sprites/Tornillo.png" alt="Tornillo" />
-        <span class="barra-herramientas__contador">7</span>
+        <img src="../../../Recursos_Gráficos/Sprites/tornillo.png" alt="Tornillo" />
+        <span class="barra-herramientas__contador">5</span>
       </button>
 
       <div class="barra-herramientas__item"></div>
@@ -132,11 +147,14 @@
       </div>
     </div>
   </section>
- 
-  <!-- NUEVO: lógica de selección y uso de herramientas -->
+
+  <!-- Secuencia de fondo (fade del "Fondo inclinado" hacia el "Fondo superior") -->
+  <script src="secuencia_fondo_nivel_1.js"></script>
+  <!-- Lógica de selección/arrastre y uso de herramientas -->
   <script src="herramientas_nivel_1.js"></script>
-  <!-- NUEVO: panel de misiones paso a paso -->
+  <!-- Panel de misiones paso a paso -->
   <script src="misiones_nivel_1.js"></script>
   <script src="nivel_1.js"></script>
+  <script src="puntaje_nivel_1.js"></script>
 </body>
 </html>

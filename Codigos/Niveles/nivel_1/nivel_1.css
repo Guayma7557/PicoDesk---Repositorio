@@ -26,8 +26,8 @@
   --alto-boton-salir: clamp(2.25rem, 2.9vw, 4.25rem);
 
   /* Barra de progreso */
-  --ancho-barra-progreso: clamp(1.5rem, 0.6vw, 0.9rem);
-  --alto-barra-progreso: clamp(50rem, 55vh, 45rem);
+  --ancho-barra-progreso: clamp(0.6rem, 1vw, 1rem);
+  --alto-barra-progreso: clamp(12rem, 55vh, 26rem);
 }
 /* ==========================================================================
    base
@@ -106,6 +106,7 @@ button {
   position: absolute;
   top: var(--espacio-borde);
   left: var(--espacio-borde);
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -227,58 +228,128 @@ button {
   pointer-events: none;
 }
 
-.contenedor-nivel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: min(70vw, 45rem);
-}
+/* ==========================================================================
+   fondo del nivel (secuencia "Fondo inclinado" -> "Fondo superior")
+   ========================================================================== */
 
-.imagen-nivel {
-  display: block;
+/* Marco a pantalla completa que respeta la proporción real de las imágenes
+   de fondo (521x260). Se ajusta al ancho o al alto de la ventana, lo que
+   toque primero, y queda centrado: así "Fondo superior" siempre se ve
+   completo y la zona interactiva (posicionada en % dentro de este marco)
+   calza con el dibujo sin importar el tamaño de pantalla. */
+.fondo-marco {
+  position: absolute;
+  inset: 0;
+  margin: auto;
   width: 100%;
-  height: auto;
-  pointer-events: none;
+  height: 100%;
+  max-width: calc(100vh * (521 / 260));
+  max-height: calc(100vw * (260 / 521));
+  aspect-ratio: 521 / 260;
+  z-index: 1;
 }
 
-.zona-placa-madre {
-  position: absolute;
-  top: 13%;
-  left: 44%;
-  width: 49%;
-  height: 52%;
-  border: 3px solid #e02424;
-  border-radius: 6px;
-  pointer-events: none; /* se activa solo con la clase .zona-activa (JS) */
-}
-
-/* NUEVO: mientras la herramienta "placa-madre" está seleccionada, la zona
-   vuelve a aceptar clicks para poder colocarla. */
-.zona-placa-madre.zona-activa {
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-/* NUEVO: la placa madre ya colocada, ocupando exactamente la zona roja */
-.placa-madre-colocada {
+.fondo-capa {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   pointer-events: none;
+  user-select: none;
 }
 
-/* Una vez colocada la placa, el marco rojo deja de mostrarse */
-.zona-placa-madre:has(.placa-madre-colocada:not([hidden])) {
+/* "Fondo inclinado - Nivel 1": se muestra arriba de todo al entrar al
+   nivel y se desvanece a los 3s (ver secuencia_fondo_nivel_1.js). Se
+   estira un poco horizontalmente (es puramente decorativa, no tiene
+   ninguna zona interactiva encima) para que no queden franjas del fondo
+   del nivel asomando a los costados. */
+.fondo-inclinado {
+  z-index: 2;
+  opacity: 1;
+  transform: scaleX(1.06);
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-inclinado {
+  opacity: 0;
+}
+
+/* "Fondo superior - Nivel 1": arranca oculta y hace fade-in al mismo
+   tiempo que "Fondo inclinado" hace fade-out (cross-fade), quedando
+   como fondo fijo del nivel una vez terminada la transición. */
+.fondo-superior {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-superior {
+  opacity: 1;
+}
+
+/* "Fondo superior - Nivel 2": ya trae la placa madre dibujada en su
+   posición y rotación final (encarada hacia la placa de puertos del
+   gabinete). Arranca oculta y hace fade-in reemplazando a
+   "Fondo superior - Nivel 1" apenas se coloca la placa madre (ver
+   ".fondo-marco.placa-madre-lista" más abajo, que va DESPUÉS en la hoja
+   para ganarle en cascada a la regla de arriba una vez que se agrega). */
+.fondo-superior-n2 {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.fondo-marco.placa-madre-lista .fondo-superior-n2 {
+  opacity: 1;
+}
+
+.fondo-marco.placa-madre-lista .fondo-superior {
+  opacity: 0;
+}
+
+.zona-placa-madre {
+  position: absolute;
+  top: 6%;
+  left: 22%;
+  width: 34%;
+  height: 41%;
+  border: 3px solid #e02424;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none; /* se activa solo con la clase .zona-activa (JS) */
+  transition: opacity 1s ease;
+  z-index: 3;
+}
+
+/* El marco rojo y su etiqueta aparecen junto con "Fondo superior", no
+   antes: se revelan recién cuando termina la introducción. */
+.fondo-marco.nivel-listo .zona-placa-madre {
+  opacity: 1;
+}
+
+/* Mientras la herramienta "placa-madre" está seleccionada, o mientras se
+   la está arrastrando por encima, la zona acepta clicks/soltar y se
+   resalta para dar feedback visual de que es un destino válido. */
+.zona-placa-madre.zona-activa {
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(224, 178, 61, 0.85);
+}
+
+/* Una vez colocada la placa (el fondo ya pasó a "Fondo superior - Nivel 2",
+   que la trae dibujada), el marco rojo y su etiqueta dejan de mostrarse. */
+.zona-placa-madre.placa-colocada {
   border-color: transparent;
 }
 
-.zona-placa-madre:has(.placa-madre-colocada:not([hidden])) .zona-placa-madre__etiqueta {
+.zona-placa-madre.placa-colocada .zona-placa-madre__etiqueta {
   display: none;
 }
 
-/* NUEVO: los 6 puntos de fijación (tornillos) */
+/* Los 5 puntos de fijación (tornillos). Arrancan invisibles: solo se
+   revelan una vez que la placa madre ya está colocada (ver la regla
+   ".zona-placa-madre.placa-colocada .punto-tornillo" más abajo). */
 .punto-tornillo {
   position: absolute;
   width: clamp(0.9rem, 1.6vw, 1.4rem);
@@ -288,21 +359,27 @@ button {
   border: 2px dashed rgba(255, 255, 255, 0.6);
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.25);
-  pointer-events: auto;
+  opacity: 0;
+  pointer-events: none;
   cursor: pointer;
+  transition: opacity 0.4s ease;
 }
 
-/* Posiciones ajustadas a los 7 agujeros de fijación reales visibles en
-   el gabinete (círculos punteados de la referencia): 2 arriba, 2 pegados
-   a los bordes laterales a media altura, 3 abajo. Los % son relativos
-   a .zona-placa-madre. */
-.punto-tornillo--1 { top: 3%;  left: 63%; }
-.punto-tornillo--2 { top: 3%;  left: 97%; }
-.punto-tornillo--3 { top: 52%; left: 0%; }
-.punto-tornillo--4 { top: 52%; left: 97%; }
-.punto-tornillo--5 { top: 96%; left: 0%; }
-.punto-tornillo--6 { top: 96%; left: 63%; }
-.punto-tornillo--7 { top: 96%; left: 97%; }
+/* Recién visibles y clickeables una vez que la placa madre está puesta. */
+.zona-placa-madre.placa-colocada .punto-tornillo {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 5 puntos de fijación: 4 en las esquinas de la placa madre y 1 en el
+   medio del borde derecho. Los % son relativos a .zona-placa-madre,
+   que ahora calza con el tamaño/posición real de la placa (ver
+   "Fondo superior - Nivel 2" como referencia de escala). */
+.punto-tornillo--1 { top: 4%;  left: 4%;  }
+.punto-tornillo--2 { top: 4%;  left: 96%; }
+.punto-tornillo--3 { top: 96%; left: 4%;  }
+.punto-tornillo--4 { top: 96%; left: 96%; }
+.punto-tornillo--5 { top: 50%; left: 96%; }
 
 /* Tornillo ya colocado (pendiente de apretar) */
 .punto-tornillo[data-colocado="true"] {
@@ -317,6 +394,13 @@ button {
   background-color: #2f5c2f;
   cursor: default;
   pointer-events: none;
+}
+
+/* Punto de fijación resaltado mientras se arrastra un tornillo por encima */
+.punto-tornillo--resaltado {
+  border-style: solid;
+  border-color: #e0b23d;
+  background-color: rgba(224, 178, 61, 0.35);
 }
 
 .zona-placa-madre__etiqueta {
@@ -340,6 +424,7 @@ button {
   bottom: var(--espacio-borde);
   left: 50%;
   transform: translateX(-50%);
+  z-index: 3;
   display: flex;
   gap: clamp(0.6rem, 1.2vw, 1rem);
   padding: clamp(0.6rem, 1.2vw, 1rem);
@@ -394,6 +479,52 @@ div.barra-herramientas__item {
   pointer-events: none;
 }
 
+/* Pista visual: resalta en amarillo la herramienta que corresponde usar
+   a continuación (placa madre -> tornillos -> destornillador), para que
+   el jugador no se pierda. La actualiza herramientas_nivel_1.js. */
+.barra-herramientas__item.barra-herramientas__item--sugerido {
+  border-color: #ffd23f;
+  border-style: solid;
+  box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 10px 2px rgba(255, 210, 63, 0.65);
+  animation: pulso-sugerencia 1.4s ease-in-out infinite;
+}
+
+/* "placa-madre" y "tornillo" se pueden arrastrar: cursor "grab" y
+   touch-action: none para que el navegador no intente hacer scroll/zoom
+   con el dedo mientras se arrastran en pantallas táctiles. */
+.barra-herramientas__item[data-herramienta="placa-madre"],
+.barra-herramientas__item[data-herramienta="tornillo"] {
+  cursor: grab;
+  touch-action: none;
+}
+
+.barra-herramientas__item[data-herramienta="placa-madre"]:active,
+.barra-herramientas__item[data-herramienta="tornillo"]:active {
+  cursor: grabbing;
+}
+
+/* Ícono "fantasma" que sigue al puntero mientras se arrastra una
+   herramienta desde la barra hasta su destino. */
+.arrastre-fantasma {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: clamp(2.25rem, 3.2vw, 2.75rem);
+  height: clamp(2.25rem, 3.2vw, 2.75rem);
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 200;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* Mientras se arrastra la placa madre, se muestra rotada para anticipar
+   cómo queda encarada una vez puesta (ver "Fondo superior - Nivel 2"). */
+.arrastre-fantasma--placa-madre {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
 /* NUEVO: contador de usos restantes (tornillos) */
 .barra-herramientas__contador {
   position: absolute;
@@ -407,20 +538,16 @@ div.barra-herramientas__item {
 }
 
 /* fin de barra de herramientas */
-.area-juego {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: clamp(1rem, 3vw, 2.5rem);
-  max-width: 96vw;
-  flex-wrap: wrap; /* en pantallas angostas, el panel pasa debajo */
-}
 
-/* NUEVO: panel de misiones */
+/* NUEVO: panel de misiones. Flota arriba a la derecha, por encima del
+   fondo del nivel (ya no depende de un contenedor flex junto al gabinete,
+   porque el fondo ahora ocupa toda la pantalla). */
 .panel-misiones {
+  position: absolute;
+  top: var(--espacio-borde);
+  right: var(--espacio-borde);
+  z-index: 3;
   width: clamp(11rem, 18vw, 15rem);
-  flex-shrink: 0;
   box-sizing: border-box;
   padding: clamp(0.75rem, 1.5vw, 1.1rem);
   background-color: rgba(0, 0, 0, 0.35);
@@ -487,4 +614,14 @@ div.barra-herramientas__item {
   inset: 0;
   clip-path: polygon(14% 44%, 0 63%, 39% 100%, 100% 20%, 82% 4%, 37% 72%);
   background-color: #1a1a1a;
+}
+
+/* Pulso de la herramienta sugerida (ver .barra-herramientas__item--sugerido) */
+@keyframes pulso-sugerencia {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 6px 1px rgba(255, 210, 63, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(255, 210, 63, 0.85), 0 0 14px 4px rgba(255, 210, 63, 0.85);
+  }
 }

@@ -18,6 +18,10 @@
     // de todo con z-index) absorbe cualquier click sobre el juego.
     botonSalir.disabled = true;
 
+    // Avisamos al resto del nivel (herramientas, arrastres en curso, etc.)
+    // que el juego quedó en pausa mientras el diálogo está abierto.
+    document.dispatchEvent(new CustomEvent("juego:pausar"));
+
     // Enfocamos "No" por accesibilidad/teclado: es la opción segura por defecto.
     botonNo.focus();
 

@@ -7,10 +7,10 @@
    ========================================================================== */
 
 (function () {
-  // NUEVO: ruta a la que se redirige al completar el 100% del nivel.
-  // Es relativa a la ubicación de nivel_1.html (mismo criterio que
-  // RUTA_MENU_PRINCIPAL en nivel_1.js). AJUSTAR con la ruta real:
-  const RUTA_SIGUIENTE_NIVEL = ""; // Cada va la dirrecion de la intermisión
+  // Ruta a la que se redirige al completar el 100% del nivel: la pantalla
+  // de intermisión. Es relativa a la ubicación de nivel_1.html (mismo
+  // criterio que RUTA_MENU_PRINCIPAL en nivel_1.js).
+  const RUTA_SIGUIENTE_NIVEL = "../../Intermisiones/IntermisionesIndex.html";
 
   // Cuánto se espera (en ms) antes de redirigir, para que el jugador
   // llegue a ver la barra en 100% y la última misión en verde.
