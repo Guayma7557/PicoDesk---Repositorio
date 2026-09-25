@@ -148,4 +148,22 @@
         padding-left: 2em;
         padding-right: 2em;
         width: max-content;
+        cursor: pointer;
+        transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover{
+        background-color: #b85454;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    button:active{
+        background-color: #8a3737;
+        transform: scale(0.95);
+        box-shadow: none;
+    }
+
+    button:focus-visible{
+        outline: 2px solid var(--ColorQuinto);
+        outline-offset: 2px;
     }
