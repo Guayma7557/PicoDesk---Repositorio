@@ -12,8 +12,7 @@
 }
 
 /* --------------- Configuraciones Generales --------------- */
-
-    *{ /* Eliminación de los valores default. */
+    *{ 
         padding: 0px;
         margin: 0px;
         box-sizing: border-box;
@@ -33,13 +32,19 @@
     }
 
 /* --------------- Body y Fondo --------------- */
-
     body{
-        background-image:
-        linear-gradient(45deg, var(--ColorSecundario), var(--ColorPrimario));
+        background-image: linear-gradient(45deg, var(--ColorSecundario), var(--ColorPrimario));
         height: 100vh;
         max-height: 100vh;
         z-index: 1;
+        /* [NUEVO] Transición suave para cuando se active el blur */
+        transition: filter 0.3s ease;
+    }
+
+    /* [NUEVO] Clase que se añade al body cuando un modal está abierto para desenfocar el fondo */
+    body.modal-abierto {
+        backdrop-filter: blur(10px);
+        overflow: hidden; /* [NUEVO] Evita el scroll del fondo */
     }
 
     button{
@@ -63,7 +68,6 @@
     }
 
 /* --------------- Header --------------- */
-
     header{
         display: flex;
         flex-direction: row;
@@ -104,16 +108,15 @@
     }
 
     #Cuenta{
-        width: 3em; /* Medida em para que sea equivalente a la altura del texto.*/
+        width: 3em;
         height: 3em;
-        border-radius: 50%; /* Al 50% para redondear cada esquina al 50% y tener un redondeado el 100%. */
+        border-radius: 50%;
         background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original');
         background-size: cover;
         border: none;
     }
 
 /* --------------- Opciones y Logo --------------- */
-
     #OpcionesYLogo{
         display: flex;
         align-items: center;
@@ -123,7 +126,6 @@
     }
 
 /* --------------- Opciones --------------- */
-
     #Opciones{
         display: flex;
         flex-direction: column;
@@ -182,7 +184,6 @@
     }
 
 /* --------------- Logo --------------- */
-
     #logo{
         display: flex;
         flex-direction: column;
@@ -201,27 +202,234 @@
         max-width: 80vw;
     }
 
-/* --------------- Keyframes (animaciones) --------------- */
+/* ================================================================= */
+/* [NUEVO] ESTILOS DE LOS POP-UPS (MODALES)                          */
+/* ================================================================= */
 
+    /* [NUEVO] Fondo oscuro semi-transparente que cubre toda la pantalla */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.6); /* [NUEVO] Fondo oscuro semi-transparente */
+        z-index: 1000; /* [NUEVO] Asegura que esté por encima de todo */
+        justify-content: center;
+        align-items: center;
+        /* [NUEVO] El blur se aplica al body, pero si se quisiera aquí sería: backdrop-filter: blur(5px); */
+    }
+
+    /* [NUEVO] Contenedor principal del modal */
+    .modal-content {
+        background-color: rgba(40, 40, 40, 0.2);
+        padding: 0; /* [MODIFICADO] Quitamos el padding general para que la barra superior toque los bordes */
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        /* [ELIMINADO] align-items: center;  <-- Ya no lo necesitamos aquí, lo manejaremos en los hijos */
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+        animation: AparecerModal 0.3s ease-out;
+        overflow: hidden; /* [NUEVO] Asegura que la barra superior respete los bordes redondeados */
+    }
+    
+    .modal-body {
+        padding: 1.5em 2em; /* [NUEVO] Espaciado interno para el contenido */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2em;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* [NUEVO] Separa el botón del título */
+        padding: 1em 1.5em; /* [NUEVO] Espaciado interno */
+        background-color: rgba(0, 0, 0, 0.2); /* [NUEVO] Un fondo sutil para diferenciar la barra */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* [NUEVO] Línea divisoria sutil */
+    }
+
+    /* [NUEVO] Animación para que el modal aparezca suavemente */
+    @keyframes AparecerModal {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* [NUEVO] Título dentro del modal */
+    .modal-content h2 {
+        font-size: 2.2em;
+        /* [ELIMINADO] margin-bottom: 0.5em; text-align: center; <-- Ya no necesita margen extra */
+        margin: 0; /* [NUEVO] Quitamos márgenes por defecto */
+        text-align: right; /* [NUEVO] Alineamos a la derecha para que no choque */
+        flex-grow: 1; /* [NUEVO] Ocupa el espacio restante */
+    }
+
+    /* [NUEVO] Botón de salida (Atrás) */
+    .btn-atras {
+        /* [ELIMINADO] position: absolute; top: 15px; left: 15px;  <-- Ya no flota */
+        background-color: var(--ColorSecundario);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 0.4em 0.8em;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: 0.2s;
+        height: auto;
+        flex-shrink: 0; /* [NUEVO] Evita que el botón se encoja si el título es muy largo */
+    }
+
+    .btn-atras:hover {
+        background-color: #8a3636; /* [NUEVO] Rojo más oscuro al pasar el mouse */
+        transform: scale(1.05);
+    }
+
+    /* [NUEVO] Campos de entrada de texto */
+    .modal-input {
+        width: 100%;
+        padding: 0.8em 1em;
+        border-radius: 20px; /* [NUEVO] Bordes redondeados como en el prototipo */
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
+        font-size: 1em;
+        outline: none;
+        text-align: center;
+        font-family: 'DotGothic16';
+    }
+
+    .modal-input:focus {
+        border-color: var(--ColorPrimario); /* [NUEVO] Resaltado al hacer foco */
+        box-shadow: 0 0 8px rgba(71, 127, 144, 0.5);
+    }
+
+    /* [NUEVO] Botón de acción principal (UNIRSE / CREAR) */
+    .btn-accion {
+        background-color: var(--ColorPrimario); /* [NUEVO] Color azul del prototipo */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 0.8em 2em;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.2s;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .btn-accion:hover {
+        background-color: #356673; /* [NUEVO] Azul más oscuro al pasar el mouse */
+        transform: translateY(-2px);
+    }
+
+    .btn-accion:active {
+        transform: translateY(0);
+    }
+
+    /* [NUEVO] Contenedor del selector de tamaño (Crear Sala) */
+    .tamano-sala-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0.5em;
+    }
+
+    .tamano-sala-container label {
+        color: var(--ColorQuinto);
+        font-size: 1.1em;
+    }
+
+    /* [NUEVO] Fila con los botones triangulares y el número */
+    .selector-tamano {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5em;
+        width: 100%;
+    }
+
+    /* [NUEVO] Botones triangulares de flecha */
+    .btn-triangulo {
+        background: none;
+        border: none;
+        color: var(--ColorPrimario);
+        font-size: 1.5em;
+        cursor: pointer;
+        transition: 0.2s;
+        padding: 0;
+        height: auto;
+    }
+
+    .btn-triangulo:hover {
+        color: var(--ColorQuinto); /* [NUEVO] Cambio de color al pasar el mouse */
+        transform: scale(1.2);
+    }
+
+    /* [NUEVO] Número que muestra el tamaño actual de la sala */
+    #valorTamano {
+        font-family: 'VT323';
+        font-size: 2.5em;
+        color: var(--ColorQuinto);
+        min-width: 1.5em;
+        text-align: center;
+    }
+
+/* ================================================================= */
+/* [NUEVO] MEDIA QUERIES (Diseño Responsive para teléfonos)          */
+/* ================================================================= */
+    @media (max-width: 600px) {
+        /* [NUEVO] Ajustes para el modal en pantallas pequeñas */
+        .modal-content {
+            padding: 1.5em;
+            width: 95%;
+            gap: 1em;
+        }
+        .modal-header {
+            padding: 0.8em 1em;
+        }
+    
+        .modal-content h2 {
+            font-size: 1.6em; /* [NUEVO] Título más pequeño en móviles */
+        }
+
+        .modal-body {
+            padding: 1em; /* [NUEVO] Menos padding en móviles */
+        }
+
+        /* [NUEVO] Ajustes para el menú principal en móviles */
+        #botones {
+            width: 80%;
+        }
+
+        #OpcionesYLogo {
+            flex-direction: column;
+            height: auto;
+            padding: 2em 0;
+        }
+
+        #Opciones {
+            width: 100%;
+        }
+
+        #logo img {
+            max-width: 60vw;
+        }
+    }
+
+/* --------------- Keyframes (animaciones) --------------- */
 @keyframes MovimientoFondo {
-    0%{
-        background-position: -3px;
-    }
-    100%{
-        background-position: 14px;
-    }
+    0%{ background-position: -3px; }
+    100%{ background-position: 14px; }
 }
 
 @keyframes AnimaciónBienvenido{
-    0%{
-        transform: scale(1) rotate(-8deg);
-    }
-    60%{
-        transform: scale(1.1) rotate(-6deg);
-        
-    }
-    100%{
-        transform: scale(1) rotate(-8deg);
-       
-    }
+    0%{ transform: scale(1) rotate(-8deg); }
+    60%{ transform: scale(1.1) rotate(-6deg); }
+    100%{ transform: scale(1) rotate(-8deg); }
 }
